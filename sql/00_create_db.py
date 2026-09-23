@@ -1,16 +1,3 @@
-"""
-00_create_db.py
-------------------------------------------------------------
-Loads data/ab_test_sessions.csv into a SQLite database
-(data/novacart_ab_test.db) so the .sql analysis queries in this
-folder can be run with any SQLite client (DB Browser for SQLite,
-the `sqlite3` command line tool, VS Code SQLite extension, etc).
-
-SQLite is used because it needs no server install -- perfect for
-a portfolio project anyone can open with a single file.
-------------------------------------------------------------
-"""
-
 import sqlite3
 import pandas as pd
 import os
@@ -24,7 +11,7 @@ df = pd.read_csv(CSV_PATH)
 conn = sqlite3.connect(DB_PATH)
 df.to_sql("ab_test_sessions", conn, if_exists="replace", index=False)
 
-# Helpful indexes for the SQL analysis queries
+
 cur = conn.cursor()
 cur.execute("CREATE INDEX IF NOT EXISTS idx_group ON ab_test_sessions(test_group);")
 cur.execute("CREATE INDEX IF NOT EXISTS idx_device ON ab_test_sessions(device_type);")
