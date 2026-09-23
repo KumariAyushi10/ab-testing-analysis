@@ -1,0 +1,31 @@
+============================================================
+NovaCart One-Click Checkout A/B Test -- Statistical Summary
+============================================================
+
+Group A (Control):   n = 9,876, conversions = 1,055, rate = 10.68%
+Group B (Treatment): n = 10,124, conversions = 1,325, rate = 13.09%
+
+--- Conversion Rate: Two-Proportion Z-Test ---
+Absolute lift:        2.41 percentage points
+Relative lift:         22.52%
+95% Confidence Interval for difference: [1.51%, 3.30%]
+Z-statistic:           5.252
+P-value:               0.00000
+Result: STATISTICALLY SIGNIFICANT at 95% confidence (p < 0.05)
+
+--- Average Order Value: Welch's T-Test (converted sessions only) ---
+Group A AOV: $54.72 (n=1055)
+Group B AOV: $56.57 (n=1325)
+T-statistic:           2.454
+P-value:               0.01420
+Result: STATISTICALLY SIGNIFICANT at 95% confidence (p < 0.05)
+
+--- Business Impact Estimate ---
+Revenue per session -- Control:   $5.845
+Revenue per session -- Treatment: $7.403
+Estimated revenue lift per 100,000 sessions: $155,799
+
+--- Recommendation ---
+Ship the One-Click Express Checkout to 100% of traffic.
+The conversion lift is statistically significant and positive,
+with no evidence of a negative effect on order value.
