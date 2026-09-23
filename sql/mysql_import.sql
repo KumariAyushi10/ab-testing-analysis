@@ -1,9 +1,3 @@
--- ============================================================
--- NovaCart A/B Test -- MySQL import script
--- Generated from data/ab_test_sessions.csv
--- Run this whole file in MySQL Workbench (Execute / lightning bolt icon)
--- ============================================================
-
 CREATE DATABASE IF NOT EXISTS novacart_ab_test;
 USE novacart_ab_test;
 
@@ -20108,5 +20102,3 @@ INSERT INTO ab_test_sessions (user_id, session_timestamp, test_group, device_typ
 (109274, '2026-06-21 23:58:00', 'A', 'mobile', 'IN', 'paid_search', 0, 1, 123.4, 0, 0.0, 3, 1),
 (103754, '2026-06-21 23:59:00', 'A', 'desktop', 'US', 'paid_search', 1, 1, 107.4, 0, 0.0, 2, 1);
 
--- Done. 20,000 rows loaded into ab_test_sessions.
--- Now run the queries in sql/01_analysis_queries.sql against this table.
