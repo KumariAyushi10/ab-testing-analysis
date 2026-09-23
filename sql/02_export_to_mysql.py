@@ -1,24 +1,3 @@
-"""
-02_export_to_mysql.py
-------------------------------------------------------------
-Generates sql/mysql_import.sql -- a MySQL-compatible SQL script
-that creates the ab_test_sessions table and inserts all 20,000
-rows using efficient multi-row INSERT statements.
-
-This lets you use MySQL Workbench (or any MySQL server) instead
-of SQLite:
-
-  1. Open MySQL Workbench, connect to your local MySQL server
-  2. Create a new schema (database), e.g. "novacart_ab_test"
-  3. File -> Open SQL Script -> select sql/mysql_import.sql
-  4. Click the lightning bolt (Execute) to run the whole script
-  5. The ab_test_sessions table will appear under your schema,
-     fully populated -- then run sql/01_analysis_queries.sql
-     against it (the queries are plain ANSI SQL and work in
-     both SQLite and MySQL unmodified).
-------------------------------------------------------------
-"""
-
 import pandas as pd
 
 CSV_PATH = "/home/claude/ab_test_project/data/ab_test_sessions.csv"
