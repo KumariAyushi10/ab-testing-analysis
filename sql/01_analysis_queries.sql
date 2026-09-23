@@ -1,20 +1,3 @@
-/* ============================================================
-   NovaCart One-Click Checkout A/B Test -- SQL Analysis
-   Database: data/novacart_ab_test.db (SQLite)
-   Table:    ab_test_sessions
-
-   Run these with:
-     sqlite3 data/novacart_ab_test.db
-     .read sql/01_analysis_queries.sql
-
-   Or open the .db file in DB Browser for SQLite and paste queries
-   into the "Execute SQL" tab.
-   ============================================================ */
-
-
-/* ------------------------------------------------------------
-   1. Overall conversion rate by test group
-   ------------------------------------------------------------ */
 SELECT
     test_group,
     COUNT(*)                                   AS total_sessions,
@@ -25,9 +8,7 @@ GROUP BY test_group
 ORDER BY test_group;
 
 
-/* ------------------------------------------------------------
-   2. Average order value (AOV) -- converted sessions only
-   ------------------------------------------------------------ */
+
 SELECT
     test_group,
     COUNT(*)                        AS orders,
@@ -39,10 +20,7 @@ GROUP BY test_group
 ORDER BY test_group;
 
 
-/* ------------------------------------------------------------
-   3. Cart abandonment rate by group
-      (abandoned = added to cart but did NOT convert)
-   ------------------------------------------------------------ */
+
 SELECT
     test_group,
     SUM(added_to_cart)                                        AS carts_started,
@@ -53,10 +31,7 @@ GROUP BY test_group
 ORDER BY test_group;
 
 
-/* ------------------------------------------------------------
-   4. Conversion rate by group AND device type
-      (checks whether the effect is consistent across devices)
-   ------------------------------------------------------------ */
+
 SELECT
     device_type,
     test_group,
@@ -68,9 +43,7 @@ GROUP BY device_type, test_group
 ORDER BY device_type, test_group;
 
 
-/* ------------------------------------------------------------
-   5. Conversion rate by group AND traffic source
-   ------------------------------------------------------------ */
+
 SELECT
     traffic_source,
     test_group,
@@ -82,9 +55,7 @@ GROUP BY traffic_source, test_group
 ORDER BY traffic_source, test_group;
 
 
-/* ------------------------------------------------------------
-   6. New vs. returning visitor performance by group
-   ------------------------------------------------------------ */
+
 SELECT
     CASE WHEN new_visitor = 1 THEN 'New Visitor' ELSE 'Returning Visitor' END AS visitor_type,
     test_group,
@@ -95,10 +66,7 @@ GROUP BY visitor_type, test_group
 ORDER BY visitor_type, test_group;
 
 
-/* ------------------------------------------------------------
-   7. Average checkout time by group
-      (does the "one-click" flow actually save time?)
-   ------------------------------------------------------------ */
+
 SELECT
     test_group,
     ROUND(AVG(checkout_time_seconds), 1) AS avg_checkout_time_sec,
@@ -109,9 +77,7 @@ GROUP BY test_group
 ORDER BY test_group;
 
 
-/* ------------------------------------------------------------
-   8. Daily conversion rate trend (for a line chart)
-   ------------------------------------------------------------ */
+
 SELECT
     DATE(session_timestamp)                      AS session_date,
     test_group,
@@ -123,9 +89,7 @@ GROUP BY session_date, test_group
 ORDER BY session_date, test_group;
 
 
-/* ------------------------------------------------------------
-   9. Revenue per session (a blended metric: conversion x AOV)
-   ------------------------------------------------------------ */
+
 SELECT
     test_group,
     COUNT(*)                                                AS total_sessions,
@@ -136,9 +100,7 @@ GROUP BY test_group
 ORDER BY test_group;
 
 
-/* ------------------------------------------------------------
-   10. Country-level breakdown (top markets)
-   ------------------------------------------------------------ */
+
 SELECT
     country,
     test_group,
