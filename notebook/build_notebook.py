@@ -1,19 +1,3 @@
-"""
-build_notebook.py
-------------------------------------------------------------
-Builds notebook/NovaCart_AB_Test_Analysis.ipynb -- a single
-Jupyter notebook that walks through the whole project end to end:
-  1. Generate the synthetic dataset
-  2. Load it into SQLite and run the SQL analysis queries
-  3. Run statistical significance tests (z-test, t-test)
-  4. Plot charts inline
-  5. Print the final recommendation
-
-This notebook is self-contained: running all cells top to bottom
-reproduces every result in the project from scratch.
-------------------------------------------------------------
-"""
-
 import nbformat as nbf
 
 nb = nbf.v4.new_notebook()
@@ -25,7 +9,7 @@ def md(text):
 def code(text):
     cells.append(nbf.v4.new_code_cell(text))
 
-# ============================================================
+
 md("""# NovaCart One-Click Checkout — A/B Test Analysis
 
 **Scenario (original, invented for this project):** NovaCart, a fictional
@@ -48,7 +32,7 @@ external or copied data is used, so this notebook and its outputs are
 original work.
 """)
 
-# ============================================================
+
 md("## 1. Setup — import libraries")
 
 code("""import numpy as np
@@ -62,7 +46,7 @@ np.random.seed(42)
 pd.set_option("display.max_columns", None)
 """)
 
-# ============================================================
+
 md("""## 2. Generate the synthetic dataset
 
 We simulate 20,000 independent checkout sessions split ~50/50 between
@@ -167,7 +151,7 @@ df.to_csv("../data/ab_test_sessions.csv", index=False)
 print("Saved to ../data/ab_test_sessions.csv")
 """)
 
-# ============================================================
+
 md("""## 3. Load into SQL (SQLite) and run analysis queries
 
 We load the dataframe into an in-memory-style SQLite database and run the
@@ -252,7 +236,7 @@ pd.read_sql(q5, conn)
 
 code("""conn.close()""")
 
-# ============================================================
+
 md("""## 4. Statistical significance testing
 
 We run a **two-proportion z-test** on conversion rate and a **Welch's
@@ -298,7 +282,7 @@ print(f"T-statistic: {t_stat:.3f}   |   P-value: {p_value_aov:.5f}")
 print("SIGNIFICANT (p < 0.05)" if p_value_aov < 0.05 else "NOT significant (p >= 0.05)")
 """)
 
-# ============================================================
+
 md("## 5. Charts")
 
 code("""fig, ax = plt.subplots(figsize=(6, 5))
@@ -364,7 +348,7 @@ plt.tight_layout()
 plt.show()
 """)
 
-# ============================================================
+
 md("""## 6. Business impact and recommendation""")
 
 code("""rev_a = a.order_value_usd.sum()
