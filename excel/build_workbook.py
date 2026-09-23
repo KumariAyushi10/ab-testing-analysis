@@ -1,20 +1,3 @@
-"""
-build_workbook.py
-------------------------------------------------------------
-Builds NovaCart_AB_Test_Analysis.xlsx with:
-  - "Raw Data" sheet: all 20,000 session rows
-  - "Summary" sheet: SUMIFS/COUNTIFS formulas computing conversion
-    rate, AOV, and abandonment rate per group (recalculates live
-    if Raw Data changes)
-  - "Dashboard" sheet: a clustered bar chart built from the Summary
-    sheet's formula outputs
-
-All numbers on Summary/Dashboard are FORMULAS referencing Raw Data,
-not hardcoded values, so the workbook recalculates if you paste in
-new data.
-------------------------------------------------------------
-"""
-
 import pandas as pd
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -32,9 +15,7 @@ n_rows = len(df)
 
 wb = Workbook()
 
-# ============================================================
-# Sheet 1: Raw Data
-# ============================================================
+
 ws_raw = wb.active
 ws_raw.title = "Raw Data"
 
@@ -54,20 +35,17 @@ for row_idx, row in enumerate(df.itertuples(index=False), start=2):
         c = ws_raw.cell(row=row_idx, column=col_idx, value=value)
         c.font = body_font
 
-# Freeze header row, set column widths
+
 ws_raw.freeze_panes = "A2"
 widths = [10, 20, 11, 12, 9, 14, 11, 13, 20, 10, 15, 13, 15]
 for i, w in enumerate(widths, start=1):
     ws_raw.column_dimensions[get_column_letter(i)].width = w
 
-last_row = n_rows + 1  # last data row number in Raw Data
+last_row = n_rows + 1  
 
-# Column letters for reference (based on df column order)
 col_letter = {name: get_column_letter(i + 1) for i, name in enumerate(headers)}
 
-# ============================================================
-# Sheet 2: Summary (formulas only)
-# ============================================================
+
 ws_sum = wb.create_sheet("Summary")
 ws_sum.sheet_view.showGridLines = False
 
@@ -189,7 +167,7 @@ for label, val_a, val_b, val_diff, note in rows_data:
         currency_rows.append(r)
     r += 1
 
-# Number formatting
+
 for row_num in range(table_header_row + 1, r):
     label_cell = ws_sum.cell(row=row_num, column=1).value
     for col in [2, 3, 4]:
@@ -205,13 +183,12 @@ for row_num in range(table_header_row + 1, r):
         else:
             c.number_format = "#,##0"
 
-# Column widths for Summary
+
 sum_widths = [26, 16, 16, 18, 40]
 for i, w in enumerate(sum_widths, start=1):
     ws_sum.column_dimensions[get_column_letter(i)].width = w
 
-# Statistical significance note (values pasted from Python scipy analysis,
-# documented as such since Excel has no built-in two-proportion z-test)
+
 note_row = r + 2
 ws_sum.cell(row=note_row, column=1, value="Statistical Significance (from Python analysis)").font = label_font
 ws_sum.cell(row=note_row + 1, column=1, value="Conversion rate p-value:")
@@ -223,16 +200,14 @@ ws_sum.cell(row=note_row + 2, column=2, value=0.01420)
 ws_sum.cell(row=note_row + 2, column=2).number_format = "0.00000"
 ws_sum.cell(row=note_row + 2, column=3, value="Source: python/02_statistical_analysis.py (Welch's t-test). Significant at p < 0.05.").font = note_font
 
-# ============================================================
-# Sheet 3: Dashboard (chart pulling from Summary formulas)
-# ============================================================
+
 ws_dash = wb.create_sheet("Dashboard")
 ws_dash.sheet_view.showGridLines = False
 ws_dash["A1"] = "NovaCart A/B Test — Dashboard"
 ws_dash["A1"].font = title_font
 ws_dash.merge_cells("A1:F1")
 
-# Small helper table the chart will read (mirrors Summary via formulas)
+
 ws_dash["A3"] = "Metric"
 ws_dash["B3"] = "Control (A)"
 ws_dash["C3"] = "Treatment (B)"
