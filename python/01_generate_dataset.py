@@ -1,34 +1,13 @@
-"""
-01_generate_dataset.py
-------------------------------------------------------------
-Generates a fully SYNTHETIC dataset for an A/B test project.
-
-Scenario (original, invented for this project):
-An online store called "NovaCart" tested a new "One-Click Express
-Checkout" button against its existing multi-step checkout flow.
-Goal: measure impact on conversion rate, average order value (AOV),
-and cart abandonment.
-
-- Group A = Control  (old multi-step checkout)
-- Group B = Treatment (new one-click checkout)
-
-This script creates data/ab_test_sessions.csv, which is the single
-raw dataset used by the SQL and Excel parts of this project.
-No external data source is used -- everything here is randomly
-generated with numpy/pandas so the whole project is original work.
-------------------------------------------------------------
-"""
-
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
 
-# Reproducible randomness
+
 np.random.seed(42)
 
-N_USERS = 20000              # total sessions in the experiment
+N_USERS = 20000              
 START_DATE = datetime(2026, 6, 1)
-TEST_DAYS = 21                # 3-week test window
+TEST_DAYS = 21                
 
 devices = ["mobile", "desktop", "tablet"]
 device_probs = [0.58, 0.35, 0.07]
@@ -57,8 +36,8 @@ for i in range(N_USERS):
     traffic_source = np.random.choice(traffic_sources, p=traffic_probs)
     new_visitor = np.random.choice([1, 0], p=[0.62, 0.38])
 
-    # ---- Baseline conversion probability (Control, Group A) ----
-    base_conv = 0.112  # 11.2% baseline conversion rate
+    
+    base_conv = 0.112  
 
     device_adj = {"mobile": -0.010, "desktop": 0.020, "tablet": -0.005}[device]
     visitor_adj = -0.018 if new_visitor else 0.014
@@ -69,16 +48,16 @@ for i in range(N_USERS):
 
     conv_prob = base_conv + device_adj + visitor_adj + traffic_adj
 
-    # ---- Treatment (Group B) effect: one-click checkout lifts conversion ----
+   
     if group == "B":
-        conv_prob += 0.021          # +2.1 percentage points absolute lift
+        conv_prob += 0.021          
         if device == "mobile":
-            conv_prob += 0.010      # extra lift on mobile
+            conv_prob += 0.010      
 
     conv_prob = float(np.clip(conv_prob, 0.01, 0.95))
     converted = np.random.binomial(1, conv_prob)
 
-    # ---- Order value only exists if converted ----
+    
     if converted:
         base_aov = np.random.normal(loc=54.0, scale=18.0)
         if group == "B":
